@@ -3,6 +3,15 @@
   line-height: 1.5;
   font-weight: 400;
 
+  /* Bootstrap theme overrides (override CSS variables instead of compiling Bootstrap SCSS)
+     Adjust these to customize .bg-secondary and related utilities app-wide */
+  --bs-secondary: #6f5af8;
+  --bs-secondary-rgb: 111,90,248;
+  --bs-secondary-contrast: #ffffff;
+
+  /* example: card background variable (used by custom rules below) */
+  --card-bg: #ffffff;
+
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -77,3 +86,11 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Ensure bg-secondary matches our CSS variable override (safe fallback)
+   Use !important sparingly; it's here to ensure utility classes reflect theme changes */
+.bg-secondary {
+  background-color: var(--bs-secondary) !important;
+  color: var(--bs-secondary-contrast) !important;
+}
+

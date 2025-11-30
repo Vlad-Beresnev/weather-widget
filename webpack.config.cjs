@@ -30,7 +30,23 @@ module.exports = {
       },
       { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
       { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
-      { test: /\.scss$/, use: ['vue-style-loader', 'css-loader', 'sass-loader'] },
+      {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              // ensure dart-sass implementation is used and silence deprecation warnings from dependencies
+              implementation: require('sass'),
+              sassOptions: {
+                quietDeps: true
+              }
+            }
+          }
+        ]
+      },
       { test: /\.(png|jpe?g|gif|svg)$/, type: 'asset/resource' }
     ]
   },

@@ -4,7 +4,6 @@
 
 <template>
     <weather-widget/>
-    <p>Welcome to Your Vue.js App</p>
 </template>
 
 <style>

@@ -1,0 +1,114 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+/* App theme overrides using CSS variables (SCSS file allows future Sass logic) */
+// SCSS palette — change these values to update the theme across the app
+$palette-primary:    #3466f2 !default; // primary brand color (topbar, buttons)
+$palette-secondary:  #6f5af8 !default; // secondary accent
+$palette-muted:      #6c757d !default; // muted text
+$palette-surface:    #eaf0f1 !default; // card surface
+$palette-surface-2:  #ffffff !default; // slightly different surface
+$palette-bg:         #242424 !default; // app background (dark)
+$palette-text:       #e9eef6 !default; // primary text color on dark bg
+
+/* root/app background will be set using CSS variable so it can be themed at runtime */
+/* expose runtime CSS variables so colors can also be changed at runtime or by consumers */
+:root {
+  --color-primary: #{$palette-primary};
+  --color-secondary: #{$palette-secondary};
+  --color-muted: #{$palette-muted};
+  --color-surface: #{$palette-surface};
+  --color-surface-2: #{$palette-surface-2};
+  --color-bg: #{$palette-bg};
+  --color-text: #{$palette-text};
+
+  --appbar-bg: var(--color-surface);
+  --appbar-text: var(color-text);
+  --appbar-btn-bg: color-mix(in srgb, var(--color-primary) 85%, white 15%);
+
+  --weather-card-bg: var(--color-surface);
+  --weather-card-contrast: #222222;
+  --weather-card-accent: var(--color-secondary);
+  --card-width: 320px; /* shared widget card width */
+}
+
+.icon-xl {
+  font-size: 5rem;
+}
+
+/* apply root/app background using the theme variable so it can be changed at runtime */
+#app, html, body {
+  background-color: var(--color-surface-2);
+  min-height: 100vh;
+}
+
+/* utility class to enforce the same width for widget cards */
+.fixed-card {
+  width: var(--card-width);
+  max-width: var(--card-width);
+  position: relative; /* establish stacking context for shadows */
+  z-index: 20;
+}
+
+.bg-secondary {
+  background-color: var(--bs-secondary) !important;
+  color: var(--bs-secondary-contrast) !important;
+}
+
+.topbar {
+  background-color: var(--appbar-bg);
+  color: var(--appbar-text);
+  .navbar-brand, .nav-link {
+    color: var(--appbar-text) !important;
+  }
+  .btn {
+    color: var(--appbar-text);
+    border: none;
+  }
+  /* ensure topbar sits above other content so its shadow is visible */
+  position: relative;
+  z-index: 40;
+}
+
+.weather-widget {
+  border-radius: 12px;      // change to taste
+  overflow: visible;       // allow child shadows to show (was hidden which clipped descendant box-shadows)
+  box-shadow: 0 6px 18px rgba(10,10,20,0.25);
+  background: var(--weather-card-bg, #fff); // optional surface
+  display: flex;
+  flex-direction: column;
+}
+.weather-card {
+  min-width: 200px;
+    border-radius: 0px;
+  background-color: var(--weather-card-bg);
+  color: var(--weather-card-contrast);
+  border: 0px solid rgba(0,0,0,0.06);
+  
+  // transition: transform 160ms ease, box-shadow 160ms ease;
+  .card-body {
+    background-color: var(--color-surface-2);
+  }
+  .city-name {
+    color: var(--weather-card-contrast);
+    font-weight: 700;
+  }
+  .metric-label {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+  .metric-value {
+    color: var(--weather-card-accent);
+    font-weight: 600;
+  }
+
+}
+
+.palette-preview { display:flex; gap:8px; align-items:center; }
+.palette-swatch { width:28px; height:20px; border-radius:4px; border:1px solid rgba(0,0,0,0.06); }
+
+/* Ensure .shadow-sm produces a visible shadow in case Bootstrap variables change */
+.card.shadow-sm {
+  box-shadow: 0 6px 18px rgba(10,10,20,0.22) !important;
+}
+
