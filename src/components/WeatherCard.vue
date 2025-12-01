@@ -62,6 +62,7 @@
 <script setup lang="ts">
 import type { City } from '../models/city.model'
 import { computed } from 'vue'
+import MetricIcon from './icons/MetricIcon.vue'
 
 type MetricName = 'wind' | 'pressure' | 'humidity' | 'visibility'
 type MetricDefinition = {
