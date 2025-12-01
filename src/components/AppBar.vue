@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import BurgerIcon from './icons/BurgerIcon.vue'
 
 const props = defineProps({
   title: { type: String, default: 'Weather Widget' },
