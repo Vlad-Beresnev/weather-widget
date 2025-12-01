@@ -38,7 +38,3 @@ Then include the generated script on any page and use the custom element tag. Ex
 	</body>
 </html>
 ```
-
-Notes:
-- The embed bundle registers the `weather-widget` custom element on load. It mounts the Vue component into a shadow root for encapsulation.
-- For production use, make sure to move your OpenWeather API key to a server-side proxy or environment variables. See `TASKS.md` for recommended next steps.
