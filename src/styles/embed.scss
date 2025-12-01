@@ -1,0 +1,5 @@
+@use 'sass:meta';
+
+@include meta.load-css('bootstrap/dist/css/bootstrap.min.css');
+@include meta.load-css('bootstrap-icons/font/bootstrap-icons.css');
+@include meta.load-css('./main.scss');
