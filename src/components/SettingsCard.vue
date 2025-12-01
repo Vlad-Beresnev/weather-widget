@@ -239,7 +239,7 @@ function onDragEnd() {
   align-items:center;
   justify-content:flex-start;
   gap:12px;
-  background:#efebe9; /* light neutral */
+  background: #efeeee;
   padding:12px 14px;
   border-radius:4px;
 }

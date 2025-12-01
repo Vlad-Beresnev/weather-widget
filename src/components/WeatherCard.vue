@@ -45,7 +45,7 @@
                 :key="metric.key"
                 >
                 <div class="d-flex align-items-center gap-2">
-                    <i :class="['bi', metric.icon, 'fs-5']" aria-hidden="true"></i>
+                    <MetricIcon :name="metric.icon" :size="22" class="text-secondary flex-shrink-0" />
 
 
                     <div class="text-start">
@@ -62,6 +62,16 @@
 <script setup lang="ts">
 import type { City } from '../models/city.model'
 import { computed } from 'vue'
+import MetricIcon from './icons/MetricIcon.vue'
+
+type MetricName = 'wind' | 'pressure' | 'humidity' | 'visibility'
+type MetricDefinition = {
+    key: MetricName
+    label: string
+    icon: MetricName
+    value: string
+}
+
 const props = defineProps<{ city: City; size?: number }>()
 const city = props.city
 const iconSize = computed(() => props.size ?? 128)
@@ -185,11 +195,11 @@ const iconAlt = computed(() => {
     return alt ?? `${city.name} weather`
 })
 
-const metrics = computed(() => [
-  { key: 'wind', label: 'Wind', icon: 'bi-wind', value: city.wind?.speed ? `${city.wind.speed} m/s` : '—' },
-  { key: 'pressure', label: 'Pressure', icon: 'bi-speedometer2', value: city.pressure ? `${city.pressure} hPa` : '—' },
-  { key: 'humidity', label: 'Humidity', icon: 'bi-droplet', value: city.humidity ? `${city.humidity}%` : '—' },
-  { key: 'visibility', label: 'Visibility', icon: 'bi-eye', value: city.visibility ? `${city.visibility} km` : '—' },
+const metrics = computed<MetricDefinition[]>(() => [
+    { key: 'wind', label: 'Wind', icon: 'wind', value: city.wind?.speed ? `${city.wind.speed} m/s` : '—' },
+    { key: 'pressure', label: 'Pressure', icon: 'pressure', value: city.pressure ? `${city.pressure} hPa` : '—' },
+    { key: 'humidity', label: 'Humidity', icon: 'humidity', value: city.humidity ? `${city.humidity}%` : '—' },
+    { key: 'visibility', label: 'Visibility', icon: 'visibility', value: city.visibility ? `${city.visibility} km` : '—' },
 ])
 </script>
 

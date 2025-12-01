@@ -4,13 +4,13 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
 
       <a class="navbar-brand d-flex align-items-center" href="#" @click.prevent>
-        <img :src="logoUrl" alt="logo" width="28" height="28" class="me-2" v-if="showLogo && !settingsOpen"/>
         <span class="fw-semibold">{{ settingsOpen ? 'Settings' : title }}</span>
       </a>
-
+      
       <div class="d-flex align-items-center">
         <button class="btn" v-if="!settingsOpen" @click="$emit('open-settings')" aria-label="Settings">
-          <i class="bi bi-gear"></i>
+          <span class="drag-handle" aria-hidden>≡</span>
+          <!-- <i class="bi bi-gear"></i> -->
         </button>
         <button class="btn" v-else @click="$emit('close-settings')" aria-label="Close settings">
           ✕
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import BurgerIcon from './icons/BurgerIcon.vue'
 
 const props = defineProps({
   title: { type: String, default: 'Weather Widget' },
@@ -30,9 +30,6 @@ const props = defineProps({
   links: { type: Array as () => Array<{ label: string; href?: string }>, default: () => [] },
   settingsOpen: { type: Boolean, default: false },
 })
-
-// resolve a local asset in a build-friendly way
-const logoUrl = new URL('../assets/vue.svg', import.meta.url).href
 
 // emits: open-settings, close-settings
 </script>
@@ -42,5 +39,9 @@ const logoUrl = new URL('../assets/vue.svg', import.meta.url).href
 .navbar-brand img {
   object-fit: cover;
   border-radius: 4px;
+}
+
+.drag-handle {
+  font-size: 25px;
 }
 </style>

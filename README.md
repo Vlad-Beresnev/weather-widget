@@ -1,38 +1,16 @@
-# Vue 3 + TypeScript + Vite
+# Weather Widget
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Minimal weather widget. The component renders as a single `<weather-widget>` custom element and reads data from OpenWeather.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Tech stack
 
-## Embedding the widget (single script)
+- Vue 3 + TypeScript
+- Webpack (dev build) & Vite (embed build)
+- Bootstrap 5, SCSS, inline SVG icons
 
-You can build an embeddable single-file bundle that registers a `<weather-widget>` custom element. The bundle is emitted to `dist/weather-widget.js` by the Vite embed build.
-
-Build the embeddable bundle:
+## Build & test the embed
 
 ```bash
-npm run build:embed
+npm run build:embed   # emits dist/weather-widget.{js,css}
+open test.html        # loads the built bundle via <weather-widget>
 ```
-
-Then include the generated script on any page and use the custom element tag. Example:
-
-```html
-<!doctype html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Embed Weather Widget</title>
-	</head>
-	<body>
-		<!-- include the generated bundle (adjust path as needed) -->
-		<script src="/dist/weather-widget.js"></script>
-
-		<!-- drop the widget tag anywhere in your page -->
-		<weather-widget></weather-widget>
-	</body>
-</html>
-```
-
-Notes:
-- The embed bundle registers the `weather-widget` custom element on load. It mounts the Vue component into a shadow root for encapsulation.
-- For production use, make sure to move your OpenWeather API key to a server-side proxy or environment variables. See `TASKS.md` for recommended next steps.
