@@ -11,6 +11,7 @@ You can build an embeddable single-file bundle that registers a `<weather-widget
 Build the embeddable bundle:
 
 ```bash
+npm install
 npm run build:embed
 ```
 

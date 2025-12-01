@@ -9,9 +9,7 @@
     aria-hidden="true"
     class="metric-icon"
   >
-    <template v-for="(path, index) in icon.paths" :key="index">
-      <path v-bind="path" />
-    </template>
+    <path v-for="path in icon.paths" :key="path.d" v-bind="path" />
   </svg>
 </template>
 
