@@ -7,6 +7,12 @@
       @open-settings="openSettings"
       @close-settings="showSettings = false"
     />
+    <div v-if="errorMsg" class="container-fluid p-2">
+      <div class="alert alert-warning alert-dismissible" role="alert">
+        {{ errorMsg }}
+        <button type="button" class="btn-close" aria-label="Close" @click="errorMsg = null"></button>
+      </div>
+    </div>
   <!-- make sure items start at the top (justify-content controls vertical alignment in a column) -->
 
       <SettingsCard
@@ -17,11 +23,11 @@
         @remove="onRemoveLocation"
         @reorder="onReorder"
       />
-      <WeatherCard
-      v-if="!showSettings"
-      v-for="city in cities"
-      :key="city.id"
-      :city="city"
+        <WeatherCard
+        v-if="!showSettings"
+        v-for="city in cities"
+        :key="city.id"
+        :city="city"
       />
   </div>
 </template>
@@ -47,8 +53,49 @@
   // expose a simple array of location names for SettingsCard (it expects string[])
   const locations = computed(() => cities.value.map((c) => c.name))
 
-  const API_KEY = '4d130245e9df76b3c37dd66cdb984fd0'
+  // Resolve API key from several fallbacks to support different bundlers / embed scenarios:
+  // 1) window.__VITE_OPENWEATHER_KEY or window.__OPENWEATHER_KEY (embedding script can set these)
+  // 2) process.env.VITE_OPENWEATHER_KEY or process.env.OPENWEATHER_KEY (Node/webpack define plugin)
+  // We avoid using `import.meta` directly because some toolchains (webpack + ts-loader) may
+  // throw "Cannot use 'import.meta' outside a module" when parsing the file.
+  const API_KEY = '4d130245e9df76b3c37dd66cdb984fd0' as string
   const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
+
+  // UI error message visible to users (clears automatically)
+  const errorMsg = ref<string | null>(null)
+  function showError(msg: string, timeout = 6000) {
+    errorMsg.value = msg
+    setTimeout(() => {
+      if (errorMsg.value === msg) errorMsg.value = null
+    }, timeout)
+  }
+
+  function friendlyReason(r: any) {
+    if (!r) return 'Unknown error'
+    if (typeof r === 'string') {
+      if (r.startsWith('http-')) {
+        const code = r.slice(5)
+        return `Server returned ${code}`
+      }
+      switch (r) {
+        case 'empty-city-name':
+          return 'Please enter a city name.'
+        case 'duplicate-city':
+          return 'This city is already in your list.'
+        case 'aborted':
+          return 'Request timed out.'
+        case 'network-or-parse-error':
+          return 'Network error. Check your connection.'
+      }
+      return r
+    }
+    return String(r)
+  }
+
+  // If API key missing, show a one-off notice in the widget.
+  if (!API_KEY) {
+    showError('OpenWeather API key not set. Set VITE_OPENWEATHER_KEY when building the bundle.')
+  }
 
   function generateId() {
     return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
@@ -62,9 +109,10 @@
       city.id = city.id ?? generateId()
       cities.value = [...cities.value, city]
     } else {
-      // fallback: add minimal entry so UI is responsive
+      // add minimal entry so UI is responsive and surface a friendly error
       const id = generateId()
       cities.value = [...cities.value, { id, name }]
+      showError(`Could not add "${name}": ${friendlyReason(res.reason)}`)
     }
     try {
       localStorage.setItem('weather:cities', JSON.stringify(cities.value))
@@ -98,6 +146,9 @@
     const promises = names.map((n) => fetchWeather(n, API_KEY, { baseUrl: BASE_URL, timeoutMs: 8000 }))
     const results = await Promise.all(promises)
     const good = results.filter((r) => r.ok).map((r) => r.city)
+    if (good.length === 0 && stored.length > 0) {
+      showError('Could not refresh saved locations. Check network or API key.')
+    }
     // ensure ids
     cities.value = good.map((c) => ({ ...c, id: c.id ?? generateId() }))
     try {
@@ -142,7 +193,8 @@
       cities.value = [cityObj, ...cities.value]
       try { localStorage.setItem('weather:cities', JSON.stringify(cities.value)) } catch {}
     } catch (err) {
-      // geolocation failed or blocked — try IP-based fallback
+      // geolocation failed or blocked — try IP-based fallback and surface a message
+      showError('Unable to access precise location — trying IP-based fallback...')
       await ipFallbackAndAdd()
       return
     }
@@ -181,7 +233,8 @@
       cities.value = [cityObj, ...cities.value]
       try { localStorage.setItem('weather:cities', JSON.stringify(cities.value)) } catch {}
     } catch (e) {
-      // swallow errors — fallback is best-effort
+      // IP fallback failed — surface a friendly message
+      showError('Could not determine your location via IP lookup.')
       return
     }
   }

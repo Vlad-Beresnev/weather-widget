@@ -1,5 +1,5 @@
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 /* App theme overrides using CSS variables (SCSS file allows future Sass logic) */
 // SCSS palette — change these values to update the theme across the app
@@ -32,6 +32,17 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   --card-width: 320px; /* shared widget card width */
 }
 
+:host,
+.weather-widget {
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--color-text);
+}
+
+:host *,
+.weather-widget * {
+  box-sizing: border-box;
+}
+
 .icon-xl {
   font-size: 5rem;
 }
@@ -42,9 +53,24 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   min-height: 100vh;
 }
 
+.weather-widget {
+  width: 100%;
+  max-width: 400px;
+  padding: 1.25rem;
+  gap: 1.25rem;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(245, 247, 252, 0.95));
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+}
+
+.weather-widget > * {
+  width: 100%;
+}
+
 /* utility class to enforce the same width for widget cards */
 .fixed-card {
-  width: var(--card-width);
+  // width: var(--card-width);
   max-width: var(--card-width);
   position: relative; /* establish stacking context for shadows */
   z-index: 20;
@@ -70,24 +96,18 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   z-index: 40;
 }
 
-.weather-widget {
-  border-radius: 12px;      // change to taste
-  overflow: visible;       // allow child shadows to show (was hidden which clipped descendant box-shadows)
-  box-shadow: 0 6px 18px rgba(10,10,20,0.25);
-  background: var(--weather-card-bg, #fff); // optional surface
-  display: flex;
-  flex-direction: column;
-}
 .weather-card {
   min-width: 200px;
-    border-radius: 0px;
+  border-radius: 16px;
   background-color: var(--weather-card-bg);
   color: var(--weather-card-contrast);
-  border: 0px solid rgba(0,0,0,0.06);
-  
-  // transition: transform 160ms ease, box-shadow 160ms ease;
+  border: 1px solid rgba(15,23,42,0.05);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
+  padding: 1.25rem 1.5rem;
+
   .card-body {
     background-color: var(--color-surface-2);
+    border-radius: 12px;
   }
   .city-name {
     color: var(--weather-card-contrast);
@@ -110,5 +130,19 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
 /* Ensure .shadow-sm produces a visible shadow in case Bootstrap variables change */
 .card.shadow-sm {
   box-shadow: 0 6px 18px rgba(10,10,20,0.22) !important;
+}
+
+.weather-card + .weather-card {
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .weather-widget {
+    padding: 1.5rem 2rem 2rem;
+  }
+
+  .weather-card {
+    padding: 1.5rem 1.75rem;
+  }
 }
 

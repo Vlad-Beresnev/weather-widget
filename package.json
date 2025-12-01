@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "webpack serve --config webpack.config.cjs --mode development",
-    "build": "webpack --config webpack.config.cjs --mode production"
+    "build": "webpack --config webpack.config.cjs --mode production",
+    "build:embed": "vite build"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.28.4",
