@@ -4,6 +4,8 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 
+![alt text](public/image.png)
+
 ## Embedding the widget (single script)
 
 You can build an embeddable single-file bundle that registers a `<weather-widget>` custom element. The bundle is emitted to `dist/weather-widget.js` by the Vite embed build.
