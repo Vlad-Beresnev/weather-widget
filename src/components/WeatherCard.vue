@@ -76,27 +76,22 @@ const props = defineProps<{ city: City; size?: number }>()
 const city = props.city
 const iconSize = computed(() => props.size ?? 128)
 
-// Resolve icon code from multiple possible API shapes
 const iconCode = computed(() => {
     const c: any = city as any
 
-    // helper to normalize many XML/JSON shapes
     const extractValue = (v: any): string | null => {
         if (v == null) return null
         if (typeof v === 'string') return v
         if (typeof v === 'number') return String(v)
         if (Array.isArray(v)) return extractValue(v[0])
         if (typeof v === 'object') {
-            // common xml2js/text wrappers
             if (v._ != null) return extractValue(v._)
             if (v['#text'] != null) return extractValue(v['#text'])
             if (v.$ != null) {
-                // attributes object - try common attribute names
                 const attrs = v.$
                 if (attrs.value) return extractValue(attrs.value)
                 if (attrs.icon) return extractValue(attrs.icon)
             }
-            // try first primitive child
             for (const k of Object.keys(v)) {
                 const val = extractValue((v as any)[k])
                 if (val != null) return val
@@ -106,19 +101,16 @@ const iconCode = computed(() => {
         return null
     }
 
-    // 1) OpenWeather JSON: weather is an array with icon/code
     if (Array.isArray(c.weather) && c.weather[0]) {
         const code = extractValue(c.weather[0].icon) || extractValue(c.weather[0].number) || extractValue(c.weather[0].value)
         if (code) return code
     }
 
-    // 2) object-shaped weather (XML->object mappers)
     if (c.weather && typeof c.weather === 'object') {
         const code = extractValue(c.weather.icon) || extractValue(c.weather.number) || extractValue(c.weather.value)
         if (code) return code
     }
 
-    // 3) top-level fallbacks
     const top = extractValue(c.icon) || extractValue(c.weatherIcon) || extractValue(c.weather)
     if (top) return top
 
@@ -129,14 +121,11 @@ const iconUrl = computed(() => {
     const code = iconCode.value
     if (!code) return ''
         const s = String(code).trim()
-        // if the code already looks like a URL, use it
         if (/^https?:\/\//i.test(s)) return s
 
-        // OpenWeather icon ids are short codes like '10d' or '01n'
         const iconIdMatch = s.match(/^\d{2}[dn]$/i)
         if (iconIdMatch) return `https://openweathermap.org/img/wn/${s}@2x.png`
 
-        // fallback: if we received a descriptive string (e.g. 'overcast clouds'), map common keywords to icon ids
         const desc = s.toLowerCase()
         const map: Record<string, string> = {
             clear: '01d',
@@ -162,7 +151,6 @@ const iconUrl = computed(() => {
             if (desc.includes(k)) return `https://openweathermap.org/img/wn/${map[k]}@2x.png`
         }
 
-        // nothing matched — don't attempt to request an invalid OpenWeather URL
         return ''
 })
 

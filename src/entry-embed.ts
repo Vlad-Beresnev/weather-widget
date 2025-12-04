@@ -1,8 +1,6 @@
 import { createApp } from 'vue'
 import WeatherWidget from './components/WeatherWidget.vue'
-// Inline CSS for immediate shadow DOM application
 import embedStyles from './styles/embed.scss?inline'
-// Side-effect import so Vite emits the stylesheet (includes Bootstrap + icon fonts)
 import './styles/embed.scss'
 
 const WEATHER_WIDGET_FILENAME = /weather-widget(?:\.[a-z0-9]+)?\.js(?:$|\?)/i

@@ -5,7 +5,3 @@
 <template>
     <weather-widget/>
 </template>
-
-<style>
-
-</style>

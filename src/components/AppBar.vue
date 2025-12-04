@@ -10,7 +10,6 @@
       <div class="d-flex align-items-center">
         <button class="btn" v-if="!settingsOpen" @click="$emit('open-settings')" aria-label="Settings">
           <span class="drag-handle" aria-hidden>≡</span>
-          <!-- <i class="bi bi-gear"></i> -->
         </button>
         <button class="btn" v-else @click="$emit('close-settings')" aria-label="Close settings">
           ✕
@@ -30,11 +29,9 @@ const props = defineProps({
   settingsOpen: { type: Boolean, default: false },
 })
 
-// emits: open-settings, close-settings
 </script>
 
 <style scoped>
-/* small optional tweaks */
 .navbar-brand img {
   object-fit: cover;
   border-radius: 4px;

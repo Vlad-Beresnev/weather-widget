@@ -36,16 +36,9 @@ function saveStoredCities(key: string, cities: City[]) {
   try {
     localStorage.setItem(key, JSON.stringify(cities))
   } catch {
-    // swallow localStorage errors (quota, private mode) - caller may still rely on in-memory state
   }
 }
 
-/**
- * Fetch weather from OpenWeather and return a typed result.
- * - Does NOT mutate any global reactive state. Returns a result object so callers can decide how to update state.
- * - Accepts an explicit apiKey (so callers can decide how to provide secrets).
- * - Optionally persists the full city object to localStorage under `storageKey`.
- */
 export async function fetchWeather(
   cityName: string,
   apiKey: string,
@@ -77,7 +70,6 @@ export async function fetchWeather(
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
 
-  // If caller passed an external signal, forward its abort to our controller
   const external = options?.signal
   const onExternalAbort = () => controller.abort()
   if (external) external.addEventListener('abort', onExternalAbort)
@@ -90,14 +82,12 @@ export async function fetchWeather(
         const payload = await res.json()
         if (payload && payload.message) reason = String(payload.message)
       } catch {
-        // ignore JSON parse errors
       }
       return { ok: false, reason, status: res.status }
     }
 
     const data = await res.json()
 
-    // Defensive mapping - use optional chaining and fallbacks
     const weatherItem: City = {
       id: normalized,
       name: data.name ?? name,
@@ -114,10 +104,8 @@ export async function fetchWeather(
       visibility: typeof data.visibility === 'number' ? data.visibility : undefined,
     }
 
-    // persist full city list if requested
     if (storageKey) {
       const list = readStoredCities(storageKey)
-      // avoid duplicates by normalized id
       const exists = list.find((c) => normalize(c.name) === normalized)
       if (!exists) {
         list.push(weatherItem)

@@ -1,18 +1,14 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
-/* App theme overrides using CSS variables (SCSS file allows future Sass logic) */
-// SCSS palette — change these values to update the theme across the app
-$palette-primary:    #3466f2 !default; // primary brand color (topbar, buttons)
-$palette-secondary:  #6f5af8 !default; // secondary accent
-$palette-muted:      #6c757d !default; // muted text
-$palette-surface:    #eaf0f1 !default; // card surface
-$palette-surface-2:  #ffffff !default; // slightly different surface
-$palette-bg:         #242424 !default; // app background (dark)
-$palette-text:       #e9eef6 !default; // primary text color on dark bg
+$palette-primary:    #3466f2 !default; 
+$palette-secondary:  #6f5af8 !default; 
+$palette-muted:      #6c757d !default; 
+$palette-surface:    #eaf0f1 !default; 
+$palette-surface-2:  #ffffff !default; 
+$palette-bg:         #242424 !default; 
+$palette-text:       #e9eef6 !default; 
 
-/* root/app background will be set using CSS variable so it can be themed at runtime */
-/* expose runtime CSS variables so colors can also be changed at runtime or by consumers */
 :root {
   --color-primary: #{$palette-primary};
   --color-secondary: #{$palette-secondary};
@@ -29,7 +25,7 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   --weather-card-bg: var(--color-surface);
   --weather-card-contrast: #222222;
   --weather-card-accent: var(--color-secondary);
-  --card-width: 320px; /* shared widget card width */
+  --card-width: 320px;
 }
 
 :host,
@@ -47,7 +43,6 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   font-size: 5rem;
 }
 
-/* apply root/app background using the theme variable so it can be changed at runtime */
 #app, html, body {
   background-color: var(--color-surface-2);
   min-height: 100vh;
@@ -68,11 +63,9 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
   width: 100%;
 }
 
-/* utility class to enforce the same width for widget cards */
 .fixed-card {
-  // width: var(--card-width);
   max-width: var(--card-width);
-  position: relative; /* establish stacking context for shadows */
+  position: relative; 
   z-index: 20;
 }
 
@@ -91,7 +84,6 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
     color: var(--appbar-text);
     border: none;
   }
-  /* ensure topbar sits above other content so its shadow is visible */
   position: relative;
   z-index: 40;
 }
@@ -127,7 +119,6 @@ $palette-text:       #e9eef6 !default; // primary text color on dark bg
 .palette-preview { display:flex; gap:8px; align-items:center; }
 .palette-swatch { width:28px; height:20px; border-radius:4px; border:1px solid rgba(0,0,0,0.06); }
 
-/* Ensure .shadow-sm produces a visible shadow in case Bootstrap variables change */
 .card.shadow-sm {
   box-shadow: 0 6px 18px rgba(10,10,20,0.22) !important;
 }
